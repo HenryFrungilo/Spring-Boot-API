@@ -4,6 +4,10 @@ import br.fema.edu.spring.categoria.dto.*;
 import br.fema.edu.spring.categoria.form.*;
 import br.fema.edu.spring.categoria.model.*;
 import br.fema.edu.spring.categoria.repository.*;
+import br.fema.edu.spring.exception.model.ExceptionModel;
+import br.fema.edu.spring.produto.model.Produto;
+import br.fema.edu.spring.produto.repository.ProdutoRepository;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.*;
@@ -16,6 +20,8 @@ import java.util.*;
 public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     @GetMapping
     public ResponseEntity<List<CategoriaDTO>> listarCategorias(){
@@ -57,11 +63,22 @@ public class CategoriaService {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity<CategoriaDTO> deletarElementosPeloURL(Long idCategoria) {
+        if(this.produtoRepository.findAllByCategoria_Id(idCategoria).isEmpty()){
+            this.categoriaRepository.delete(this.buscarCategoria(idCategoria));
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            this.produtoRepository.deleteByCategoria_Id(idCategoria);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
 
-    public Categoria buscarCategoria(Long idCategoria) {
+    public Categoria buscarCategoria(Long idCategoria){
         Optional<Categoria> optionalCategoria = this.categoriaRepository.findById(idCategoria);
         if (!optionalCategoria.isPresent()) {
-            return null;
+            throw new ExceptionModel("Categoria "+idCategoria+" não encontrada");
         }
         return optionalCategoria.get();
     }

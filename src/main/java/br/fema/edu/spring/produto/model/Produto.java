@@ -56,8 +56,8 @@ public class Produto {
         this.valor = valor;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public Categoria getCategoria(Categoria categoria) {
+        return this.categoria;
     }
 
     public void setCategoria(Categoria categoria) {

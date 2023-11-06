@@ -1,24 +1,24 @@
-package br.fema.edu.spring.cliente.model;
+package br.fema.edu.spring.cliente.dto;
 
-import com.sun.istack.*;
+import br.fema.edu.spring.cliente.model.Cliente;
 
-import javax.persistence.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Entity
-@Table(name="cliente")
-public class Cliente {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ClienteDTO {
+
     private Long id;
-    @NotNull
-    @Column(name = "nome_cliente")
     private String nome;
-    @NotNull
-    @Column(name = "cpf_cliente")
     private String cpf;
-    @NotNull
-    @Column(name = "rg_cliente")
+
     private String rg;
+
+    public ClienteDTO(Cliente cliente) {
+        this.id = cliente.getId();
+        this.nome = cliente.getNome();
+        this.cpf = cliente.getCpf();
+        this.rg = cliente.getRg();
+    }
 
     public Long getId() {
         return id;
@@ -50,5 +50,9 @@ public class Cliente {
 
     public void setRg(String rg) {
         this.rg = rg;
+    }
+
+    public static List<ClienteDTO> converter(List<Cliente> clientes){
+        return clientes.stream().map(ClienteDTO::new).collect(Collectors.toList());
     }
 }

@@ -39,4 +39,9 @@ public class CategoriaResource {
     public ResponseEntity<CategoriaDTO> deletarCategoria(@PathVariable Long idCategoria){
         return this.categoriaService.deletarCategoria(idCategoria);
     }
+
+    @DeleteMapping("/deletar-produtos-categoria/{idCategoria}")
+    public ResponseEntity<CategoriaDTO> deletarElementosPeloURL(@PathVariable Long idCategoria){
+        return this.categoriaService.deletarElementosPeloURL(idCategoria);
+    }
 }

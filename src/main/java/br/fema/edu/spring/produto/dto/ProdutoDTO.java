@@ -1,6 +1,5 @@
 package br.fema.edu.spring.produto.dto;
 
-import br.fema.edu.spring.categoria.dto.*;
 import br.fema.edu.spring.categoria.model.*;
 import br.fema.edu.spring.produto.model.*;
 
@@ -12,10 +11,22 @@ public class ProdutoDTO {
     private String nome;
 
     private Float valor;
+
+    private Categoria categoria;
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
     public ProdutoDTO(Produto produto){
         this.id = produto.getId();
         this.nome = produto.getNome();
         this.valor  = produto.getValor();
+        this.categoria = produto.getCategoria(this.categoria);
     }
 
     public Long getId() {
